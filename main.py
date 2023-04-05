@@ -1,6 +1,6 @@
 # import smtplib
 
-
+  
 # # Sender Info
 # my_email = "appbreweryinfo@gmail.com"
 # password = "abcd1234()"
@@ -15,6 +15,7 @@
 #                             msg="Subject:Hello\n\nGood Afternoon.")
 
 
+### DATETIME MODULE ### 
 import datetime as dt
 
 now = dt.datetime.now()
@@ -23,14 +24,22 @@ month = now.month
 day = now.weekday() # Returns num 0-7, mon-sun
 
 
-
-
 # date_of_birth = dt.datetime(year=2009,month=6, day=7, hour=4)
-
 # print(date_of_birth)
 
-with open("quotes.txt", "r") as file:
-    # data = file.read()
-    total_lines =len(file.readlines())
 
-    print(f"lines: {total_lines}")
+
+### RANDOM MODULE ###
+import random
+
+# Open quote file
+with open("quotes.txt") as quote_file:
+    # Read file line by line
+    all_quotes = quote_file.readlines()
+    
+    # Store each line from file as an item in a list 
+    quote = random.choice(all_quotes)
+
+    print(type(all_quotes))
+    
+ 
