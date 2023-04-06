@@ -1,42 +1,36 @@
-# import smtplib
-
-
-# # Sender Info
-# my_email = "appbreweryinfo@gmail.com"
-# password = "abcd1234()"
-
-# # LONGWAY
-# # connection = smtplib.SMTP("smtp.gmail.com")
-
-
-# # #transport layer security - secures your connection to an email server
-# # connection.starttls()
-# # connection.login(user=my_email, password=password)
-# # connection.send_message(from_addr=my_email, 
-# #                         to_addrs="appbrewerytesting@yahoo.com", 
-# #                         msg="Subject:Hello\n\nGood Afternoon.")
-# # connection.close()
-
-# # SHORTWAY
-# with smtplib.SMTP("smtp.gmail.com") as connection:
-#     connection.starttls()
-#     connection.login(user=my_email, password=password)
-#     connection.send_message(from_addr=my_email, 
-#                             to_addrs="appbrewerytesting@yahoo.com", 
-#                             msg="Subject:Hello\n\nGood Afternoon.")
-
-
+import random
+import smtplib
 import datetime as dt
 
-now = dt.datetime.now()
-year = now.year
-month = now.month
-day_of_week = now.weekday() # Returns num 0-7, mon-sun
+
+# Determine if present date matches email date
+today = dt.datetime.now()
+year = today.year
+month = today.month
+day = today.weekday() # Returns num 0-7, mon-sun
 
 
+email_day = dt.datetime(year=2023, month=4, day=0, hour=8)
+print(email_day)
 
-print(day_of_week)
+# Access quotes.txt file
+with open("quotes.txt") as quote_file:
+    # "readlines" - reads file line by line & stores each line as an item in a list 
+    all_quotes = quote_file.readlines()
+    
+    # Retrieve random quote from list 
+    quote = random.choice(all_quotes)
+ 
 
-date_of_birth = dt.datetime(year=2009,month=6, day=7, hour=4)
+ 
+# Sender Info
+s_email = "yyyyyyyyy@yyyy.com"
+s_password = "thisisapassword"
 
-print(date_of_birth)
+## Set up SMTPlib for sending & recieving emails
+with smtplib.SMTP("smtp.gmail.com") as connection:
+    connection.starttls()
+    connection.login(user=s_email, password=s_password)
+    connection.send_message(from_addr=s_email, 
+                            to_addrs="xxxxxxxx@xxxxx.com", 
+                            msg="Subject:{quote}.")
