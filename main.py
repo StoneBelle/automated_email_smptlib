@@ -1,45 +1,15 @@
-# import smtplib
-
-  
-# # Sender Info
-# my_email = "appbreweryinfo@gmail.com"
-# password = "abcd1234()"
-
-
-# # SHORTWAY
-# with smtplib.SMTP("smtp.gmail.com") as connection:
-#     connection.starttls()
-#     connection.login(user=my_email, password=password)
-#     connection.send_message(from_addr=my_email, 
-#                             to_addrs="appbrewerytesting@yahoo.com", 
-#                             msg="Subject:Hello\n\nGood Afternoon.")
-
-
-### DATETIME MODULE ### 
 import datetime as dt
+##################### Extra Hard Starting Project ######################
 
-now = dt.datetime.now()
-year = now.year
-month = now.month
-day = now.weekday() # Returns num 0-7, mon-sun
+# 1. Update the birthdays.csv
 
 
-# date_of_birth = dt.datetime(year=2009,month=6, day=7, hour=4)
-# print(date_of_birth)
+# 2. Check if today matches a birthday in the birthdays.csv
 
 
 
-### RANDOM MODULE ###
-import random
 
-# Open quote file
-with open("quotes.txt") as quote_file:
-    # Read file line by line
-    all_quotes = quote_file.readlines()
-    
-    # Store each line from file as an item in a list 
-    quote = random.choice(all_quotes)
 
-    print(type(all_quotes))
-    
- 
+# 3. If step 2 is true, pick a random letter from letter templates and replace the [NAME] with the person's actual name from birthdays.csv
+
+# 4. Send the letter generated in step 3 to that person's email address.
