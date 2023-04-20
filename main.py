@@ -1,81 +1,68 @@
 import datetime as dt
 import pandas as pd 
+import os
+import random
 
-# Get present date and store in variable
-
-# Find current date and store in variable
-today = dt.datetime.now()
-
-# Current date as str
-year = today.strftime("%Y") # 2023
-month = today.strftime("%m") # April
-day = today.strftime("%d") # 11
-full_date = today.strftime("%D") # 04/11/23
-weekday_short = today.strftime("%a") # Tue
-weekday_full = today.strftime("%A") # Tuesday
-
-
-print(full_date)
-print(day)
-print(weekday_full)
-
-
-# Current time as str
-hour = today.strftime("%H") # 23 (i.e. uses military time)
-print(f"HOUR: {hour}")
-
-# Current date as int
-# year_int = today.year
-# month_int = today.month
-# day_int= today.weekday() # Returns num 0-7, mon-sun
-
-
-
-
-# # Set a given date
-# date_of_birth = dt.datetime(year=2009,month=6, day=7, hour=4)
-# print(date_of_birth)
-
-
-
-
-
-
-
-
-
-data = pd.Series([1,2,3])
-print(data)
-##################### Extra Hard Starting Project ######################
-
-
-# Use panadas to retrieve name & birthday data from CSV file 
-
+##### PANDAS #####
 class BirthDex:
+    """Retrieves data from "birthdays.csv" file."""
     def __init__(self, file_name):
         super().__init__()
 
-        # Read "birthdays.csv"
+        # Reads "birthdays.csv" as pandas Dataframe
         self.sheet_data = pd.read_csv(file_name)
+        self.num_rows = self.sheet_data.shape[0]
 
-        # For each person in CSV file, store name, email, and birthday inside nested dict
+
+        # Retrieve name, email, and birthday data inside CSV file
         self.name_data = self.sheet_data["name"].tolist()
+        self.email_data = self.sheet_data["email"].tolist()
 
+    def birthday_data(self):
+        """Returns a list[str] of all birthdays from the CSV file in the format of 'month/day'.'"""
+        birth_month = self.sheet_data["month"].tolist()
+        birth_day = self.sheet_data["day"].tolist()
+        
+        bday_data = []
 
-
+        for x in range(len(birth_month)):
+            if birth_month[x] <= 9:
+                m = "0" + str(birth_month[x])
+            else:
+                m = str(birth_month[x])             
+            bday_data.append(m + "/" + str(birth_day[x]))         
+        
+        return bday_data
 
 test1 = BirthDex("birthdays.csv")
-print(test1.name_data)
+names = test1.name_data
+emails = test1.email_data
+bdays = test1.birthday_data()
 
+##### DATETIME #####
+# Get current date and store in variable
+get_date = dt.datetime.now()
+today = get_date.strftime("%D") # MM/DD/YY
+year = str(get_date.year - 2000)
 
+# Check if any birthdays match present date
+for x in range(len(bdays)):
+    check = bdays[x] + "/" + year
+    # If dates match, open folder containing templates
+    templates = []
+    if check == today:
+        print(check)
+        path = "mail_templates/"
+        template = random.choice(os.listdir(path))
+        # for entry in os.listdir(path):
+        #     if os.path.isfile(os.path.join(path, entry)):
+        #         templates.append(entry)      
+     
+    else:
+        print("No greetings need to be sent today.")
 
-# Check if birthday matches present date
-
-# If dates match, open folder containing templates
-
-# Select random template
-
-# Replace [NAME] with appropriate data from CSV file
+        # Select random template
+        # Replace [NAME] with appropriate data from CSV file 
 
 
 # Send updated template to person's email
