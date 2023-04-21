@@ -2,27 +2,25 @@ import datetime as dt
 import pandas as pd 
 import os
 import random
+import smtplib
 
-##### PANDAS #####
-class BirthDex:
-    """Retrieves data from "birthdays.csv" file."""
+class BirthDex: 
+    """Retrieves data from "birthdays.csv" file and sends out a personal birthday email if it's someone's birthday."""
     def __init__(self, file_name):
         super().__init__()
 
         # Reads "birthdays.csv" as pandas Dataframe
         self.sheet_data = pd.read_csv(file_name)
-        self.num_rows = self.sheet_data.shape[0]
-
-
-        # Retrieve name, email, and birthday data inside CSV file
+   
+        # Stores all name and email data from CSV file into a list
         self.name_data = self.sheet_data["name"].tolist()
         self.email_data = self.sheet_data["email"].tolist()
 
+    # Modifies birthdates to following format: MM/DD/YY
     def birthday_data(self):
         """Returns a list[str] of all birthdays from the CSV file in the format of 'month/day'.'"""
         birth_month = self.sheet_data["month"].tolist()
         birth_day = self.sheet_data["day"].tolist()
-        
         bday_data = []
 
         for x in range(len(birth_month)):
@@ -34,44 +32,45 @@ class BirthDex:
         
         return bday_data
 
-test1 = BirthDex("birthdays.csv")
-names = test1.name_data
-emails = test1.email_data
-bdays = test1.birthday_data()
+check_birthdays = BirthDex("birthdays.csv")
+names = check_birthdays.name_data
+emails = check_birthdays.email_data
+bdays = check_birthdays.birthday_data()
 
-##### DATETIME #####
-# Get current date and store in variable
+# Present date
 get_date = dt.datetime.now()
 today = get_date.strftime("%D") # MM/DD/YY
 year = str(get_date.year - 2000)
 
-# Check if any birthdays match present date
+# Checks if any birthdays match present date
 for x in range(len(bdays)):
     check = bdays[x] + "/" + year
-    # If dates match, open folder containing templates
-    templates = []
+    # Open templates folder if match found
     if check == today:
-        print(check)
+        # Selects a random template from fodler 
         path = "mail_templates/"
-        template = random.choice(os.listdir(path))
-        # for entry in os.listdir(path):
-        #     if os.path.isfile(os.path.join(path, entry)):
-        #         templates.append(entry)      
-     
-    else:
-        print("No greetings need to be sent today.")
+        template = random.choice(os.listdir(path))    
+        pathway = path + template 
 
-        # Select random template
-        # Replace [NAME] with appropriate data from CSV file 
+        # Opens the chosen template
+        with open(pathway, "r") as temp:
+            draft = temp.read()
+            print(draft)
+        
+        # Replaces [NAME] with appropriate data from CSV file 
+        with open(pathway, "w") as temp:
+            final_draft = draft.replace("[NAME]", names[x])
+            print(final_draft)
 
+        # Sender Info
+        sender = "sample1@gmail.com"
+        password = "abc123"
 
-# Send updated template to person's email
-
-
-
-
-
-# 1. Update the birthdays.csv
-# 2. Check if today matches a birthday in the birthdays.csv
-# 3. If step 2 is true, pick a random letter from letter templates and replace the [NAME] with the person's actual name from birthdays.csv
-# 4. Send the letter generated in step 3 to that person's email address.
+        # Sends updated email draft to reciever 
+        with smtplib.SMTP("smtp.gmail.com") as connection:
+            connection.starttls() # Secures connection to email server
+            connection.login(user=sender, password=password)
+            connection.send_message(from_addr=sender, 
+                                    to_addrs=emails[x], 
+                                    msg=f"Subject:Happy Birthday! :D\n\n{final_draft}.")
+            
