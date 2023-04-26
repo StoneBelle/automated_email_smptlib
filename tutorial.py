@@ -11,7 +11,7 @@ password = "abc123"
 # connection.starttls()
 # connection.login(user=my_email, password=password)
 # connection.send_message(from_addr=my_email, 
-#                         to_addrs="appbrewerytesting@yahoo.com", 
+#                         to_addrs="sample2@yahoo.com", 
 #                         msg="Subject:Hello\n\nGood Afternoon.")
 # connection.close()
 
